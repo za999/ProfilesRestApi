@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from profiles_api import serializers
+from rest_framework import viewsets
 
 
 class HelloApiView(APIView):
@@ -38,7 +39,7 @@ class HelloApiView(APIView):
         """Handle updating an object"""
         # Put is for updating an object. pk stands for the id of the object.
         # It basically replaces the object with the object provided.
-        return Response({'method': 'PUT'}) 
+        return Response({'method': 'PUT'})
 
     def patch(self, request, pk=None):
         """Handle a partial update of an object"""
@@ -48,3 +49,52 @@ class HelloApiView(APIView):
     def delete(self, request, pk=None):
         """Deletes an object"""
         return Response({'method': 'DELETE'})
+
+
+class HelloViewSet(viewsets.ViewSet):
+    """Test api viewsets"""
+    serializer_class = serializers.HelloSerializer
+
+    def list(self, request):
+        """Return a hello message"""
+        random_objects = ['Waterbottle', 'Fork', 'Cup']
+
+        return Response({'message': 'Hello!', 'random_objects': random_objects})
+
+    def create(self, request):
+        """Creates a new hello message"""
+        serializer = self.serializer_class(data=request.data)
+
+        # Django rest framework serializer can validate the input
+        # Here we gonna validate that the data (name) is no longer than 10 letters.
+        if serializer.is_valid():
+            # Here we retrieve the validated data, in this case the name.
+            name = serializer.validated_data.get('name')
+            message = f'Hello {name}!'
+            return Response({'message': message})
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    # retrieve is mapped to a http GET operation, it is to GET a specific object based on pk id.
+    def retrieve(self, request, pk=None):
+        """Handle getting an object by its ID"""
+        return Response({'http_method': 'GET'})
+
+    # update is mapped to a http PUT operation, it is PUT on the pk id.
+    def update(self, request, pk=None):
+        """Handle updating an object"""
+        return Response({'http_method': 'PUT'})
+
+    # partial_update is mapped to a http PATCH operation, it is PATCH on the pk id
+    # updates the fields that were changed in the object only.
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+        return Response({'http_method': 'PATCH'})
+
+    # destory is mapped to a http DELETE operation, it is DELTE on the pk id.
+    def destroy(self, request, pk=None):
+        """Handle removing an object"""
+        return Response({'http_method': 'DELETE'})
