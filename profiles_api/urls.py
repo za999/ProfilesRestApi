@@ -14,6 +14,8 @@ router.register('profile', views.UserProfileViewSet)
 # call the specific function in the HelloApiView.
 urlpatterns = [
     path('hello-view/', views.HelloApiView.as_view()),
+    # Enable login endpoint for DRF
+    path('login/', views.UserLoginApiView.as_view()),
     path('', include(router.urls))
 ]
 # path('', include(router.urls)) router will create

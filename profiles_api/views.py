@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import models
 from profiles_api import serializers
@@ -120,5 +122,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # Adds filtering for this viewset
     filter_backends = (filters.SearchFilter,)
     # This tells the filter_backends which fileds should be searchable.
-    # This will tell DRF what we can search by. 
+    # This will tell DRF what we can search by.
     search_fields = ('name', 'email',)
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user auth tokens"""
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
