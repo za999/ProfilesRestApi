@@ -3,3 +3,4 @@ from profiles_api import models
 
 # Registers the UserProfile model to Django Admin interface
 admin.site.register(models.UserProfile)
+admin.site.register(models.ProfileFeedItem)

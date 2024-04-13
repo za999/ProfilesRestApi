@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, basename='hello-viewset')
 # No need to specify a basename since the viewset uses a queryset.
 router.register('profile', views.UserProfileViewSet)
-
+router.register('feed', views.UserProfileFeedViewSet)
 # This is a suburl that is linked to the HelloApiView
 # Whenever a ApiView call is made, like get or post, it'll
 # call the specific function in the HelloApiView.

@@ -17,3 +17,18 @@ class UpdateOwnProfile(permissions.BasePermission):
             return True
 
         return obj.id == request.user.id
+
+
+class UpdateOwnStatus(permissions.BasePermission):
+    """Allow user to edit their own status"""
+
+    # So below we're going to check if we're going to let
+    # a specific reqeust to be able to make a change on the actual obj.
+    def has_object_permission(self, request, view, obj):
+        """Checks if the user is trying to update their own status"""
+        # If the user is trying to create a new object or get one, returns true
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # For put, patch and delete request we want to check if the user owns the status before updating.
+        return obj.user_profile.id == request.user.id
