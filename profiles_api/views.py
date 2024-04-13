@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from profiles_api import models
 from profiles_api import serializers
@@ -116,3 +117,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     # We set a permission for Profile viewset, so each request will be sent through UpdateOwnProfile.
     permission_classes = (permissions.UpdateOwnProfile,)
+    # Adds filtering for this viewset
+    filter_backends = (filters.SearchFilter,)
+    # This tells the filter_backends which fileds should be searchable.
+    # This will tell DRF what we can search by. 
+    search_fields = ('name', 'email',)
